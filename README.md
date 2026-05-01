@@ -75,8 +75,10 @@ curl -L https://github.com/neo4j/mcp/releases/latest/download/neo4j-mcp_Linux_x8
 sudo mv neo4j-mcp /usr/local/bin/
 ```
 
+Verify installation with:
+
 ```bash
-neo4j-mcp -v  # verify
+neo4j-mcp -v  
 ```
 
 ---
@@ -85,17 +87,19 @@ neo4j-mcp -v  # verify
 
 ```bash
 claude mcp add \
-  --transport stdio \
-  --env NEO4J_URI=bolt://127.0.0.1:7687 \
-  --env NEO4J_USERNAME=neo4j \
-  --env NEO4J_PASSWORD=neo4jneo4j \
-  --env NEO4J_DATABASE=neo4j \
-  --env NEO4J_READ_ONLY=true \
-  neo4j-mcp neo4j-mcp
+      --transport stdio \
+      -e NEO4J_URI=bolt://127.0.0.1:7687 \
+      -e NEO4J_USERNAME=neo4j \
+      -e NEO4J_PASSWORD=neo4jneo4j \
+      -e NEO4J_DATABASE=neo4j \
+      -e NEO4J_READ_ONLY=true \
+      -- neo4j-mcp neo4j-mcp
 ```
 
+Verify MCP is added correctly with:
+
 ```bash
-claude mcp list  # verify
+claude mcp list 
 ```
 
 Claude Code now has three tools available against your database:
@@ -108,7 +112,7 @@ Claude Code now has three tools available against your database:
 
 ### Test the integration
 
-Try these questions in a Claude Code session:
+Try these questions in a (new) Claude Code session:
 
 - What products are currently in stock?
 - Which customers have placed the most orders?
@@ -129,7 +133,7 @@ The MCP server gives Claude the tools. A skill gives it the judgment to use them
 
 A skill is a markdown file loaded on-demand into Claude's context when invoked. It sits above the raw MCP layer and encodes the decisions that the model would otherwise have to infer: inspect the schema before writing Cypher, retry with a reformulated query before surfacing an error, re-rank results by relevance rather than returning whatever the query happened to return. The LLM runs that logic natively between tool calls, chaining schema inspection, querying, and summarization within a single turn.
 
-The skill is already included at [.claude/skills/neo4j-query.md](.claude/skills/neo4j-query.md). It calls the registered MCP tools directly:
+The skill is already included at [.claude/skills/neo4j-query/SKILL.md](.claude/skills/neo4j-query/SKILL.md). It calls the registered MCP tools directly:
 
 ```
 mcp__neo4j-mcp__get-schema
@@ -222,7 +226,9 @@ mcporter call 'neo4j-mcp.read-cypher(query: "MATCH (p:Product) RETURN p.productN
 
 ## 7. Create a Claude Code skill (CLI variant)
 
-Same skill as section 5, but backed by MCPorter instead of the registered MCP tools. The skill file is at [.claude/skills/neo4j-query-mcporter.md](.claude/skills/neo4j-query-mcporter.md).
+Same skill as section 5, but backed by MCPorter instead of the registered MCP tools. 
+
+The skill file is at [.claude/skills/neo4j-query-cli/SKILL.md](.claude/skills/neo4j-query-cli/SKILL.md).
 
 The skill calls MCPorter via the `Bash` tool, exporting `.env` before each call so credentials are available:
 

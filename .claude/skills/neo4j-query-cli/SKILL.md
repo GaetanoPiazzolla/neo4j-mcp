@@ -1,5 +1,5 @@
 ---
-name: neo4j-query
+name: neo4j-query-cli
 description: >
   Query the local Neo4j database using natural language. Use this skill whenever
   the user asks anything about products, customers, orders, suppliers, categories,
